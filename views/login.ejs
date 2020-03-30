@@ -1,0 +1,11 @@
+<link rel='stylesheet' href='css/login.css'/>
+
+<form class="form-signin login">
+    <img class="mb-4 text-center" src="https://alotech.com.tr/static/img/alo-tech-logo.png" alt="">
+    <label name="lblEmail" for="inputEmail" class="sr-only">Email address</label>
+    <input name="inputEmail" type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input name="inputPassword" type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+    <label class="text-danger"><%= message %></label>
+    <button class="btn btn-lg btn-primary btn-block" type="submit" formmethod="POST">Sign in</button>
+</form>
