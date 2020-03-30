@@ -12,6 +12,7 @@
       <a class="nav-item nav-link" href="#">Leads</a>
       <a class="nav-item nav-link" href="#">Customers</a>
       <a class="nav-item nav-link" href="#">Contacts</a>
+      <a class="nav-item nav-link" href="#"><%= username %></a>   
     </div>
   </div>
 </nav>
@@ -42,7 +43,6 @@
   </div>
 </div>
 
-
 <script>
 var app = angular.module('myApp', []);
 app.controller('myCtrl', function($scope) {
@@ -63,24 +63,25 @@ app.controller('myCtrl', function($scope) {
       let session = getCookie("aloTechSession");
       
       let url = "http://smartkontak.musterihizmetleri.com/api/?function=click2call&phonenumber="+ phone +"&session="+ session;
+      console.log(url);
       
       var http = new XMLHttpRequest();
-      var x = http.open("GET", url, true);
+
+      http.onreadystatechange = function() {
+        if(http.readyState == 4){
+          if(http.status == 200){
+            alert("Click2Call isteği başarılı!");
+          }else if(http.status == 404){
+            alert("Click2Call isteği başarısız! Hatalı Session!");
+          }
+        }
+      };
+
+      http.open("GET", url, true);
       http.send();
     }
 });
 </script>
-
-
-
-
-
-
-
-
-
-
-
 
 
 <iframe id="alotechiframe" scrolling="yes" allow="camera *; geolocation *; microphone *" src="https://softphone.alo-tech.com/generic/" scrolling="no"></iframe>

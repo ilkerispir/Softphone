@@ -57,8 +57,9 @@ app.get('/softphone', (req, res) => {
     fetch(url, settings)
     .then(res => res.json())
     .then((json) => {
-        if(json.success){           
-            res.render('softphone');   
+        if(json.success){      
+            var username = req.cookies.aloTechMail;
+            res.render('softphone', {username: username});   
         }else{
             res.redirect('login');
         }
