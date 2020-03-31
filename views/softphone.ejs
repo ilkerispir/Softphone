@@ -1,31 +1,66 @@
-<link rel='stylesheet' href='css/softphone.css'/>
+<link rel='stylesheet' href='../css/softphone.css'/>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script src="../js/softphone.js"></script>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">AloTech</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-    <div class="navbar-nav">
-      <a class="nav-item nav-link active" href="#">Main<span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link" href="#">Leads</a>
-      <a class="nav-item nav-link" href="#">Customers</a>
-      <a class="nav-item nav-link" href="#">Contacts</a>
-      <a class="nav-item nav-link" href="#"><%= username %></a>   
+ <!-- ======= Header ======= -->
+ <header id="header" class="fixed-top">
+  <div class="container d-flex">
+    <div class="logo mr-auto">
+      <h1 class="text-light"><a href="index.html">AloTech</a></h1>
     </div>
-  </div>
-</nav>
 
-<div class="container" ng-app="myApp" ng-controller="myCtrl" style="padding-top: 50px;">
+    <nav class="nav-menu d-none d-lg-block">
+      <ul>
+        <li class="active"><a href="#hero">Home</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#team">Team</a></li>
+        <li><a href="#contact">Contact Us</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<!-- End Header -->
+
+<div class="container" ng-app="myApp" ng-controller="myCtrl" style="padding-top: 100px;">
+  <h2 id="h2_call1">Call 1</h2>
   <div class="row">
     <div class="col-md-8 order-md-1">
       <div class="row">
         <div class="col-md-6 mb-3">
-          <input readonly name="number" type="text" class="form-control" id="number" placeholder="" value="" ng-model="customerName">
+          <input readonly name="in_customerName" type="text" class="form-control" id="in_customerName" placeholder="" value="" ng-model="in_customerName">
         </div>
         <div class="col-md-6 mb-3">
-          <input name="customerPhone" readonly name="number" type="text" class="form-control" id="number" placeholder="" value="" ng-model="customerPhone">
+          <input name="in_customerPhone" readonly name="number" type="text" class="form-control" id="in_customerPhone" placeholder="" value="" ng-model="in_customerPhone">
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <input readonly name="in_callStatusName" type="text" class="form-control" id="in_callStatusName" placeholder="" value="" ng-model="in_callStatusName">
+        </div>
+        <div class="col-md-6 mb-3">
+          <input name="in_callStatus" readonly type="text" class="form-control" id="in_callStatus" placeholder="" value="" ng-model="in_callStatus">
+        </div>
+      </div>     
+    </div>
+  </div>
+
+  <h2 id="h2_call2">Call 2</h2>
+  <div class="row">
+    <div class="col-md-8 order-md-1">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <input readonly name="out_customerName" type="text" class="form-control" id="out_customerName" placeholder="" value="" ng-model="out_customerName">
+        </div>
+        <div class="col-md-6 mb-3">
+          <input name="out_customerPhone" readonly name="number" type="text" class="form-control" id="out_customerPhone" placeholder="" value="" ng-model="out_customerPhone">
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <input readonly name="out_callStatusName" type="text" class="form-control" id="out_callStatusName" placeholder="" value="" ng-model="out_callStatusName">
+        </div>
+        <div class="col-md-6 mb-3">
+          <input name="out_callStatus" readonly name="out_callStatus" type="text" class="form-control" id="out_callStatus" placeholder="" value="" ng-model="out_callStatus">
         </div>
       </div>
       <hr class="mb-4">
@@ -43,56 +78,109 @@
   </div>
 </div>
 
-<script>
-var app = angular.module('myApp', []);
-app.controller('myCtrl', function($scope) {
-    $scope.customer1 = "Ilker";
-    $scope.customer2 = "Fatih";
-
-    $scope.getDetailCustomer1 = function() {
-      $scope.customerName = "Ilker";
-      $scope.customerPhone = "05453671355";
-    }
-    $scope.getDetailCustomer2 = function() {
-      $scope.customerName = "Fatih";
-      $scope.customerPhone = "05071303066";
-    }
-
-    $scope.Click2Call = function() {
-      let phone =  $scope.customerPhone;
-      let session = getCookie("aloTechSession");
-      
-      let url = "http://smartkontak.musterihizmetleri.com/api/?function=click2call&phonenumber="+ phone +"&session="+ session;
-      console.log(url);
-      
-      var http = new XMLHttpRequest();
-
-      http.onreadystatechange = function() {
-        if(http.readyState == 4){
-          if(http.status == 200){
-            alert("Click2Call isteği başarılı!");
-          }else if(http.status == 404){
-            alert("Click2Call isteği başarısız! Hatalı Session!");
-          }
-        }
-      };
-
-      http.open("GET", url, true);
-      http.send();
-    }
-});
-</script>
-
-
 <iframe id="alotechiframe" scrolling="yes" allow="camera *; geolocation *; microphone *" src="https://softphone.alo-tech.com/generic/" scrolling="no"></iframe>
 <script>
+  var app = angular.module('myApp', []);
+  app.controller('myCtrl', function($scope) {
+      $scope.getDetailCustomer1 = function() {
+        $scope.out_customerName = "Ilker";
+        $scope.out_customerPhone = "05453671355";
+      }
+      $scope.getDetailCustomer2 = function() {
+        $scope.out_customerName = "Fatih";
+        $scope.out_customerPhone = "05071303066";
+      }
+
+      $scope.Click2Call = function() {
+        let phone =  $scope.customerPhone;
+        let session = getCookie("aloTechSession");
+        
+        let url = "http://smartkontak.musterihizmetleri.com/api/?function=click2call&phonenumber="+ phone +"&session="+ session;
+        console.log(url);
+        
+        var http = new XMLHttpRequest();
+
+        http.onreadystatechange = function() {
+          if(http.readyState == 4){
+            if(http.status == 200){
+              alert("Click2Call isteği başarılı!");
+            }else if(http.status == 404){
+              alert("Click2Call isteği başarısız! Hatalı Session!");
+            }
+          }
+        };
+
+        http.open("GET", url, true);
+        http.send();
+      }
+  });
+
   function elle(){
     alert('elle tetiklendim.');
   }
-  
+
+  var in_check_activecallkey = "";
+  var out_check_activecallkey = "";
   function onmessage(e) {
-  var event = JSON.parse(e.data);
-  console.log(event);
+    var event = JSON.parse(e.data);
+    
+    if(in_check_activecallkey == ""){
+      if(event.messageType == "IncomingCall"){
+      document.getElementById("in_customerName").value = event.number;
+      document.getElementById("in_customerPhone").value = "Kayıtlı Olmayan Kullanıcı";
+
+      document.getElementById("in_callStatusName").value = "Çağrı Durmu";
+      document.getElementById("in_callStatus").value = event.messageType;
+      document.getElementById("h2_call1").innerHTML = event.messageType + " 1";
+      
+      in_check_activecallkey = event.activecallkey;
+      }
+    }else if(out_check_activecallkey == ""){
+      if(event.messageType == "IncomingCall"){
+      document.getElementById("out_customerName").value = event.number;
+      document.getElementById("out_customerPhone").value = "Kayıtlı Olmayan Kullanıcı";
+
+      document.getElementById("out_callStatusName").value = "Çağrı Durmu";
+      document.getElementById("out_callStatus").value = event.messageType;
+      document.getElementById("h2_call2").innerHTML = event.messageType + " 2";
+      
+      out_check_activecallkey = event.activecallkey;
+      }
+    }
+
+    if(event.messageType == "Accept"){
+      if(document.getElementById("in_callStatus").value == "IncomingCall"){
+        document.getElementById("in_callStatus").value = event.messageType;
+      }else if(document.getElementById("out_callStatus").value == "IncomingCall"){
+        document.getElementById("out_callStatus").value = event.messageType;
+      }    
+    }else if(event.messageType == "Talking"){
+      if(document.getElementById("in_callStatus").value == "Accept"){
+        document.getElementById("in_callStatus").value = event.messageType;
+      }else if(document.getElementById("out_callStatus").value == "Accept"){
+        document.getElementById("out_callStatus").value = event.messageType;
+      }
+    } 
+    
+    if(event.messageType == "Hangup" && event.activecallkey == in_check_activecallkey){
+      in_check_activecallkey = "";
+      document.getElementById("in_customerName").value = "";
+      document.getElementById("in_customerPhone").value = "";
+
+      document.getElementById("in_callStatusName").value = "";
+      document.getElementById("in_callStatus").value = "";
+      document.getElementById("h2_call1").innerHTML = "Call 1";
+    }else if(event.messageType == "Hangup" && event.activecallkey == out_check_activecallkey){
+      out_check_activecallkey = "";
+      document.getElementById("out_customerName").value = "";
+      document.getElementById("out_customerPhone").value = "";
+
+      document.getElementById("out_callStatusName").value = "";
+      document.getElementById("out_callStatus").value = "";
+      document.getElementById("h2_call2").innerHTML = "Call 2";
+    }
+    
+    console.log(event);
   }
   window.addEventListener('message', onmessage, false);
 
