@@ -119,32 +119,32 @@
     alert('elle tetiklendim.');
   }
 
-  var in_check_activecallkey = "";
-  var out_check_activecallkey = "";
+  var check_activecallkey1 = "";
+  var check_activecallkey2 = "";
   function onmessage(e) {
     var event = JSON.parse(e.data);
     
-    if(in_check_activecallkey == ""){
-      if(event.messageType == "IncomingCall"){
+    if(check_activecallkey1 == ""){
+      if((event.messageType == "IncomingCall") || (event.messageType == "Dial")){
       document.getElementById("in_customerName").value = event.number;
-      document.getElementById("in_customerPhone").value = "Kayıtlı Olmayan Kullanıcı";
+      document.getElementById("in_customerPhone").value = "Telefon Numarası";
 
       document.getElementById("in_callStatusName").value = "Çağrı Durmu";
       document.getElementById("in_callStatus").value = event.messageType;
-      document.getElementById("h2_call1").innerHTML = event.messageType + " 1";
+      document.getElementById("h2_call1").innerHTML = event.messageType;
       
-      in_check_activecallkey = event.activecallkey;
+      check_activecallkey1 = event.activecallkey;
       }
-    }else if(out_check_activecallkey == ""){
-      if(event.messageType == "IncomingCall"){
+    }else if(check_activecallkey2 == ""){
+      if((event.messageType == "IncomingCall") || (event.messageType == "Dial")){
       document.getElementById("out_customerName").value = event.number;
-      document.getElementById("out_customerPhone").value = "Kayıtlı Olmayan Kullanıcı";
+      document.getElementById("out_customerPhone").value = "Telefon numarası";
 
       document.getElementById("out_callStatusName").value = "Çağrı Durmu";
       document.getElementById("out_callStatus").value = event.messageType;
-      document.getElementById("h2_call2").innerHTML = event.messageType + " 2";
+      document.getElementById("h2_call2").innerHTML = event.messageType;
       
-      out_check_activecallkey = event.activecallkey;
+      check_activecallkey2 = event.activecallkey;
       }
     }
 
@@ -162,16 +162,16 @@
       }
     } 
     
-    if(event.messageType == "Hangup" && event.activecallkey == in_check_activecallkey){
-      in_check_activecallkey = "";
+    if(event.messageType == "Hangup" && event.activecallkey == check_activecallkey1){
+      check_activecallkey1 = "";
       document.getElementById("in_customerName").value = "";
       document.getElementById("in_customerPhone").value = "";
 
       document.getElementById("in_callStatusName").value = "";
       document.getElementById("in_callStatus").value = "";
       document.getElementById("h2_call1").innerHTML = "Call 1";
-    }else if(event.messageType == "Hangup" && event.activecallkey == out_check_activecallkey){
-      out_check_activecallkey = "";
+    }else if(event.messageType == "Hangup" && event.activecallkey == check_activecallkey2){
+      check_activecallkey2 = "";
       document.getElementById("out_customerName").value = "";
       document.getElementById("out_customerPhone").value = "";
 
