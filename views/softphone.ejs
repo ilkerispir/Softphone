@@ -147,11 +147,12 @@
       if((event.messageType == "IncomingCall") || (event.messageType == "OutgoingActiveCallKey")){
         if(event.messageType == "IncomingCall"){
           document.getElementById("in_customerName").value = event.number;
-          document.getElementById("h2_call1").innerHTML = event.messageType;       
+          document.getElementById("h2_call1").innerHTML = event.messageType;   
+          document.getElementById("in_callStatus").value = event.messageType;    
         }else if(event.messageType == "OutgoingActiveCallKey"){
           document.getElementById("h2_call1").innerHTML = "Dial";
-        }
-      document.getElementById("in_callStatus").value = event.messageType;
+          document.getElementById("in_callStatus").value = "Dialing";
+        }  
       document.getElementById("in_customerPhone").value = "Telefon Numarası";
       document.getElementById("in_callStatusName").value = "Çağrı Durmu";  
       check_activecallkey1 = event.activecallkey;
@@ -160,9 +161,11 @@
       if((event.messageType == "IncomingCall") || (event.messageType == "OutgoingActiveCallKey")){
         if(event.messageType == "IncomingCall"){
           document.getElementById("out_customerName").value = event.number;
-          document.getElementById("h2_call2").innerHTML = event.messageType;       
+          document.getElementById("h2_call2").innerHTML = event.messageType;   
+          document.getElementById("out_callStatus").value = event.messageType;    
         }else if(event.messageType == "OutgoingActiveCallKey"){
           document.getElementById("h2_call2").innerHTML = "Dial";
+          document.getElementById("out_callStatus").value = "Dialing";
         }    
       document.getElementById("out_callStatus").value = event.messageType;
       document.getElementById("out_customerPhone").value = "Telefon numarası";
@@ -176,9 +179,9 @@
         document.getElementById("in_callStatus").value = event.messageType;
       }else if(document.getElementById("out_callStatus").value == "IncomingCall"){
         document.getElementById("out_callStatus").value = event.messageType;
-      }else if(document.getElementById("in_callStatus").value == "OutgoingActiveCallKey"){
+      }else if(document.getElementById("in_callStatus").value == "Dialing"){
         document.getElementById("in_callStatus").value = event.messageType;
-      }else if(document.getElementById("out_callStatus").value == "OutgoingActiveCallKey"){
+      }else if(document.getElementById("out_callStatus").value == "Dialing"){
         document.getElementById("out_callStatus").value = event.messageType;
       }  
     }else if(event.messageType == "Talking"){
