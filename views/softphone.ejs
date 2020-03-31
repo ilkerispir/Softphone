@@ -1,6 +1,5 @@
 <link rel='stylesheet' href='../css/softphone.css'/>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-<script src="../js/softphone.js"></script>
 
  <!-- ======= Header ======= -->
  <header id="header" class="fixed-top">
@@ -60,11 +59,21 @@
           <input readonly name="out_callStatusName" type="text" class="form-control" id="out_callStatusName" placeholder="" value="" ng-model="out_callStatusName">
         </div>
         <div class="col-md-6 mb-3">
-          <input name="out_callStatus" readonly name="out_callStatus" type="text" class="form-control" id="out_callStatus" placeholder="" value="" ng-model="out_callStatus">
+          <input readonly name="out_callStatus" type="text" class="form-control" id="out_callStatus" placeholder="" value="" ng-model="out_callStatus">
         </div>
       </div>
       <hr class="mb-4">
-      <a class="btn btn-success btn-lg btn-block text-white" ng-click="Click2Call()">Click2Call</a>       
+      
+      
+      <a class="btn btn-success btn-lg btn-block text-white" ng-click="Click2Call()">Click2Call</a>   
+      <div class="row" style="padding-top: 20px;">
+        <div class="col-md-6 mb-3">
+          <input readonly name="c2callName" type="text" class="form-control" id="c2callName" placeholder="" value="" ng-model="c2callName">
+        </div>
+        <div class="col-md-6 mb-3">
+          <input readonly name="c2callPhone" type="text" class="form-control" id="c2callPhone" placeholder="" value="" ng-model="c2callPhone">
+        </div>
+      </div>    
     </div>
   </div>
 
@@ -78,21 +87,23 @@
   </div>
 </div>
 
+
+
 <iframe id="alotechiframe" scrolling="yes" allow="camera *; geolocation *; microphone *" src="https://softphone.alo-tech.com/generic/" scrolling="no"></iframe>
 <script>
   var app = angular.module('myApp', []);
   app.controller('myCtrl', function($scope) {
       $scope.getDetailCustomer1 = function() {
-        $scope.out_customerName = "Ilker";
-        $scope.out_customerPhone = "05453671355";
+        $scope.c2callName = "Ilker";
+        $scope.c2callPhone = "05453671355";
       }
       $scope.getDetailCustomer2 = function() {
-        $scope.out_customerName = "Fatih";
-        $scope.out_customerPhone = "05071303066";
+        $scope.c2callName = "Fatih";
+        $scope.c2callPhone = "05071303066";
       }
 
       $scope.Click2Call = function() {
-        let phone =  $scope.customerPhone;
+        let phone =  $scope.c2callPhone;
         let session = getCookie("aloTechSession");
         
         let url = "http://smartkontak.musterihizmetleri.com/api/?function=click2call&phonenumber="+ phone +"&session="+ session;
@@ -123,27 +134,39 @@
   var check_activecallkey2 = "";
   function onmessage(e) {
     var event = JSON.parse(e.data);
+
+    if(event.messageType == "Dial"){
+      if(document.getElementById("in_customerName").value == ""){
+        document.getElementById("in_customerName").value = event.number;
+      }else if(document.getElementById("out_customerName").value == ""){
+        document.getElementById("out_customerName").value = event.number;
+      }
+    }
     
     if(check_activecallkey1 == ""){
-      if((event.messageType == "IncomingCall") || (event.messageType == "Dial")){
-      document.getElementById("in_customerName").value = event.number;
-      document.getElementById("in_customerPhone").value = "Telefon Numarası";
-
-      document.getElementById("in_callStatusName").value = "Çağrı Durmu";
+      if((event.messageType == "IncomingCall") || (event.messageType == "OutgoingActiveCallKey")){
+        if(event.messageType == "IncomingCall"){
+          document.getElementById("in_customerName").value = event.number;
+          document.getElementById("h2_call1").innerHTML = event.messageType;       
+        }else if(event.messageType == "OutgoingActiveCallKey"){
+          document.getElementById("h2_call1").innerHTML = "Dial";
+        }
       document.getElementById("in_callStatus").value = event.messageType;
-      document.getElementById("h2_call1").innerHTML = event.messageType;
-      
+      document.getElementById("in_customerPhone").value = "Telefon Numarası";
+      document.getElementById("in_callStatusName").value = "Çağrı Durmu";  
       check_activecallkey1 = event.activecallkey;
       }
     }else if(check_activecallkey2 == ""){
-      if((event.messageType == "IncomingCall") || (event.messageType == "Dial")){
-      document.getElementById("out_customerName").value = event.number;
-      document.getElementById("out_customerPhone").value = "Telefon numarası";
-
-      document.getElementById("out_callStatusName").value = "Çağrı Durmu";
+      if((event.messageType == "IncomingCall") || (event.messageType == "OutgoingActiveCallKey")){
+        if(event.messageType == "IncomingCall"){
+          document.getElementById("out_customerName").value = event.number;
+          document.getElementById("h2_call2").innerHTML = event.messageType;       
+        }else if(event.messageType == "OutgoingActiveCallKey"){
+          document.getElementById("h2_call2").innerHTML = "Dial";
+        }    
       document.getElementById("out_callStatus").value = event.messageType;
-      document.getElementById("h2_call2").innerHTML = event.messageType;
-      
+      document.getElementById("out_customerPhone").value = "Telefon numarası";
+      document.getElementById("out_callStatusName").value = "Çağrı Durmu";
       check_activecallkey2 = event.activecallkey;
       }
     }
@@ -153,7 +176,11 @@
         document.getElementById("in_callStatus").value = event.messageType;
       }else if(document.getElementById("out_callStatus").value == "IncomingCall"){
         document.getElementById("out_callStatus").value = event.messageType;
-      }    
+      }else if(document.getElementById("in_callStatus").value == "OutgoingActiveCallKey"){
+        document.getElementById("in_callStatus").value = event.messageType;
+      }else if(document.getElementById("out_callStatus").value == "OutgoingActiveCallKey"){
+        document.getElementById("out_callStatus").value = event.messageType;
+      }  
     }else if(event.messageType == "Talking"){
       if(document.getElementById("in_callStatus").value == "Accept"){
         document.getElementById("in_callStatus").value = event.messageType;
@@ -178,6 +205,12 @@
       document.getElementById("out_callStatusName").value = "";
       document.getElementById("out_callStatus").value = "";
       document.getElementById("h2_call2").innerHTML = "Call 2";
+    }else if(event.messageType == "Hangup" && event.activecallkey == null){
+      if(document.getElementById("in_customerPhone").value == ""){
+        document.getElementById("in_customerName").value = "";
+      }else if(document.getElementById("out_customerPhone").value == ""){
+        document.getElementById("out_customerName").value = "";
+      }
     }
     
     console.log(event);
