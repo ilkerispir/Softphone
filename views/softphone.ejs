@@ -198,20 +198,10 @@
       document.getElementById("in_callStatusName").value = "";
       document.getElementById("in_callStatus").value = "";
       document.getElementById("h2_call1").innerHTML = "Call 1";
-
-      wait(5000);   
-      let session = getCookie("aloTechSession");
-      let url = "http://smartkontak.musterihizmetleri.com/api/?function=getrecordingurl&session="+ session +"&callid="+ event.activecallkey; 
-      console.log(url);
-      var xhr = new XMLHttpRequest();
-
-      xhr.open("GET", url, true);  
-      xhr.send();  
-      xhr.onload = () => {
-        let data = JSON.parse(xhr.response);
-        console.log(data.recordingurl);
-        openInNewTab(data.recordingurl);
-      } 
+ 
+      let url = "https://smartkontak.musterihizmetleri.com/recordings/" + event.activecallkey;
+      openInNewTab(url);
+      
     }else if(event.messageType == "Hangup" && event.activecallkey == check_activecallkey2){
       check_activecallkey2 = "";
       document.getElementById("out_customerName").value = "";
@@ -220,17 +210,8 @@
       document.getElementById("out_callStatus").value = "";
       document.getElementById("h2_call2").innerHTML = "Call 2";
 
-      wait(5000);   
-      let session = getCookie("aloTechSession");
-      let url = "http://smartkontak.musterihizmetleri.com/api/?function=getrecordingurl&session="+ session +"&callid="+ event.activecallkey; 
-      var xhr = new XMLHttpRequest();
-      xhr.open("GET", url, true);  
-      xhr.send();  
-      xhr.onload = () => {
-        let data = JSON.parse(xhr.response);
-        console.log(data.recordingurl);
-        openInNewTab(data.recordingurl);
-      } 
+      let url = "https://smartkontak.musterihizmetleri.com/recordings/" + event.activecallkey;
+      openInNewTab(url);
     }else if(event.messageType == "Hangup" && event.activecallkey == null){
       if(document.getElementById("in_customerPhone").value == ""){
         document.getElementById("in_customerName").value = "";
